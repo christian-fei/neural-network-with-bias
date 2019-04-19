@@ -1,5 +1,27 @@
 #!/usr/bin/env node
 
+function uniformDistribution (min, max) {
+  if (min > max) throw new Error('Minimum value cannot be greater than maximum value')
+
+  if (min === max) return Infinity
+
+  return 1 / (max - min)
+}
+
+function calcSumOfWeightedInputs (neuronInputs, weights) {
+  return neuronInputs.reduce((acc, neuronInput, index) => {
+    return acc + weights[index] * neuronInput
+  }, 0)
+}
+
+function sigmoid (sumOfWeightedInputs) {
+  return 1 / (1 + Math.exp(-sumOfWeightedInputs))
+}
+
+function sigmoidGradient (neuronOutput) {
+  return neuronOutput * (1 - neuronOutput)
+}
+
 function NeuralNetwork () {
   if (!(this instanceof NeuralNetwork)) { return new NeuralNetwork() }
   const self = this
@@ -8,30 +30,8 @@ function NeuralNetwork () {
 
   this.bias = uniformDistribution(-1, 1)
 
-  function uniformDistribution (min, max) {
-    if (min > max) throw new Error('Minimum value cannot be greater than maximum value')
-
-    if (min === max) return Infinity
-
-    return 1 / (max - min)
-  }
-
-  function calcSumOfWeightedInputs (neuronInputs) {
-    return neuronInputs.reduce((acc, neuronInput, index) => {
-      return acc + self.weights[index] * neuronInput
-    }, 0)
-  }
-
-  function sigmoid (sumOfWeightedInputs) {
-    return 1 / (1 + Math.exp(-sumOfWeightedInputs))
-  }
-
-  function sigmoidGradient (neuronOutput) {
-    return neuronOutput * (1 - neuronOutput)
-  }
-
   this.predict = function (neuronInputs) {
-    let sumOfWeightedInputs = calcSumOfWeightedInputs(neuronInputs)
+    let sumOfWeightedInputs = calcSumOfWeightedInputs(neuronInputs, self.weights)
     let neuronOutput = sigmoid(sumOfWeightedInputs + self.bias)
     return neuronOutput
   }
