@@ -19,5 +19,8 @@
   "homepage": "https://github.com/christian-fei/neural-network-with-bias#readme",
   "devDependencies": {
     "ava": "^1.4.1"
+  },
+  "dependencies": {
+    "ml-regression": "^4.4.2"
   }
 }

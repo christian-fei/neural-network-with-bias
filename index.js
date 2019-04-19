@@ -9,6 +9,7 @@ function uniformDistribution (min, max) {
 }
 
 function calcSumOfWeightedInputs (neuronInputs, weights) {
+  if (neuronInputs[0] === weights[0] === undefined) throw new Error('neuronInputs and weights must have the same shape', { neuronInputs, weights })
   return neuronInputs.reduce((acc, neuronInput, index) => {
     return acc + weights[index] * neuronInput
   }, 0)
@@ -22,11 +23,15 @@ function sigmoidGradient (neuronOutput) {
   return neuronOutput * (1 - neuronOutput)
 }
 
+function normalize (array = []) {
+  const min = Math.min(...array)
+  const max = Math.max(...array)
+  return array.map(a => a * a / max * min)
+}
+
 function NeuralNetwork () {
   if (!(this instanceof NeuralNetwork)) { return new NeuralNetwork() }
   const self = this
-
-  this.weights = [uniformDistribution(-1, 1), uniformDistribution(-1, 1), uniformDistribution(-1, 1)]
 
   this.bias = uniformDistribution(-1, 1)
 
@@ -37,17 +42,18 @@ function NeuralNetwork () {
   }
 
   this.train = function (trainingSetExamples, { numberOfIterations }) {
+    self.weights = Array.from({ length: trainingSetExamples[0].inputs.length }).map(_ => uniformDistribution(-1, 1))
+    // self.weights = trainingSetExamples[0].inputs
+
     for (let iteration = 0; iteration < numberOfIterations; iteration++) {
       for (let trainingSetExample of trainingSetExamples) {
         let predictedOutput = self.predict(trainingSetExample.inputs)
-        // console.log('predictedOutput', predictedOutput)
-
-        let errorInOutput = trainingSetExample['output'] - predictedOutput
-        // console.log('errorInOutput', errorInOutput)
+        let errorInOutput = trainingSetExample.output - predictedOutput
 
         self.weights.reduce((acc, curr, index) => {
           let neuronInput = trainingSetExample.inputs[index]
           let adjustWeight = neuronInput * errorInOutput * sigmoidGradient(predictedOutput)
+          // console.log({ neuronInput, index, adjustWeight })
           self.weights[index] += adjustWeight
           self.bias += errorInOutput * sigmoidGradient(predictedOutput)
         }, 0)
@@ -80,13 +86,13 @@ async function main () {
     { 'inputs': [1, 0, 1], 'output': 1 },
     { 'inputs': [0, 1, 1], 'output': 0 }
   ]
-  const numberOfIterations = 100000
+  const numberOfIterations = 10000
   const nn = new NeuralNetwork()
   nn.train(trainingSetExamples, { numberOfIterations })
 
   const newSituation = [1, 1, 0]
-  let prediction = nn.predict(newSituation)
-  console.log('prediction', prediction, newSituation)
-
-  return nn
+  return {
+    prediction: nn.predict(newSituation),
+    nn
+  }
 }
