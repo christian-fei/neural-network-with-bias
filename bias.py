@@ -16,7 +16,7 @@ class NeuralNetwork():
 	# Make a prediction
 	def think(self, neuron_inputs):
 		sum_of_weighted_inputs = self.__sum_of_weighted_inputs(neuron_inputs)
-		neuron_output = self.__sigmoid(sum_of_weighted_inputs + self.bias) 
+		neuron_output = self.__sigmoid(sum_of_weighted_inputs + self.bias)
 		return neuron_output
 
 	# Adjust the weights of the neural network to minimise the error for the training set
@@ -50,7 +50,7 @@ class NeuralNetwork():
 	def __sigmoid(self, sum_of_weighted_inputs):
 		return 1 / (1 + math.exp(-sum_of_weighted_inputs))
 
-	# Calculate the gradient of the sigmoid using its own output	
+	# Calculate the gradient of the sigmoid using its own output
 	def __sigmoid_gradient(self, neuron_output):
 		return neuron_output * (1 - neuron_output)
 
@@ -79,7 +79,7 @@ print("New weights after training: " + str(neural_network.weights))
 print("New bias after training: " + str(neural_network.bias))
 
 # Make a prediction for a situation
-new_situation = [0, 0, 0]
+new_situation = [1, 0, 0]
 prediction = neural_network.think(new_situation)
 
 print("Prediction for the situation " + str(new_situation) + " -> ? " + str(prediction))

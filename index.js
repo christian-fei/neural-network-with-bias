@@ -58,16 +58,20 @@ function NeuralNetwork () {
   return this
 }
 
-main()
-  .then(() => {
-    console.log('success')
-    process.exit(0)
-  })
-  .catch(err => {
-    console.error('failure')
-    console.error(err)
-    process.exit(1)
-  })
+if (require.main === module) {
+  main()
+    .then(() => {
+      console.log('success')
+      process.exit(0)
+    })
+    .catch(err => {
+      console.error('failure')
+      console.error(err)
+      process.exit(1)
+    })
+} else {
+  module.exports = NeuralNetwork
+}
 
 async function main () {
   const trainingSetExamples = [

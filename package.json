@@ -1,0 +1,23 @@
+{
+  "name": "neural-network-with-bias",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/christian-fei/neural-network-with-bias.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/christian-fei/neural-network-with-bias/issues"
+  },
+  "homepage": "https://github.com/christian-fei/neural-network-with-bias#readme",
+  "devDependencies": {
+    "ava": "^1.4.1"
+  }
+}
